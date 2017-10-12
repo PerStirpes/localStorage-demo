@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <p>
+    <label>Engine</label>
+  </p>
+  <div  role="group" id="selectEngine">
+    <button type="button"  data-engine="localStorage">Persistent Storage</button>
+    <button type="button"  data-engine="sessionStorage">Per-Session Storage</button>
+  </div>
+  
+  <p style="margin-top: 10px">
+    <label for="value">Value for <code>myKey</code></label>
+    <input type="text" id="value">
+  </p>
+  
+  <p>Open the example in another tab and change the value there to see the synchronization via <code>storage</code> event.</p>
+  <div id="target"></div>
+</body>
+</html>
