@@ -1,46 +1,57 @@
-if('localStorage' in window || 'sessionStorage' in window){
-  var selectedEngine
-  const logTarget = document.getElementById('target')
-  const valueInput = document.getElementById('value')
+if ("localStorage" in window || "sessionStorage" in window) {
+  var selectedEngine;
+  const logTarget = document.getElementById("target");
+  const valueInput = document.getElementById("value");
 
-  let reloadInputValue = () => valueInput.value = window[selectedEngine].getItem('myKey') || ''
+  let reloadInputValue = () =>
+    (valueInput.value = window[selectedEngine].getItem("myKey") || "");
 
-
-var selectedEngine = (engine) => {
-  document.querySelector(`[data-engine=${engine}]`).classList.add('active')
-  if(selectedEngine){ 
-    document.querySelector(`[data-engine=${selectedEngine}]`).classList.remove('active')  
-  }
-  selectedEngine = engine
-  reloadInputValue()
-}
-
-let getSelectedEngineFn = (button) => {
-  return () => {
-    let engine = button.getAttribute('date-engine')
-    if(selectedEngine !== engine){
-      selectedEngine(engine)
+  var selectedEngine = engine => {
+    document.querySelector(`[data-engine=${engine}]`).classList.add("active");
+    if (selectedEngine) {
+      document
+        .querySelector(`[data-engine=${selectedEngine}]`)
+        .classList.remove("active");
     }
+    selectedEngine = engine;
+    reloadInputValue();
+  };
+
+  let getSelectedEngineFn = button => {
+    return () => {
+      let engine = button.getAttribute("date-engine");
+      if (selectedEngine !== engine) {
+        selectedEngine(engine);
+      }
+    };
+  };
+
+  const handleChange = change => {
+    const timeBadge = new Date().toTimeString.split(" ")[0];
+    const newState = document.createElement("p");
+    newState.innerHTML = `<span class="badge"> ${timeBadge}</span> ${change}.`;
+    logTarget.appendChild(newState);
+  };
+
+  var buttions = document.querySelector("#selectEngine button");
+  for (var i = 0; i < button.length; ++i) {
+    button[i].addEventListener("click", getSelectedEngineFn(buttons[i]));
   }
-}
 
-const handleChange = (change) => {
-  const timeBadge = new Date().toTimeString.split(' ')[0]
-  const newState = document.createElement('p')
-  newState.innerHTML =  `<span class="badge"> ${timeBadge}</span> ${change}.` 
-  logTarget.appendChild(newState)
-}
+  selectEngine("localStorage");
+  valueInput.addEventListener("keyup", () => {
+    window[selectedEngine.setItem("myKey", this.value)];
+  });
 
-var buttions = document.querySelector('#selectEngine button')
-for (var i = 0; i < button.length; ++i){
-  button[i].addEventListener('click', getSelectedEngineFn(buttons[i]))
-}
-
-selectEngine('localStorage')
-valueInput.addEventListener('keyup', () => {
-  window[selectedEngine.setItem('myKey', this.value)]
-})
-
-
-
+  window.addEventListener("storage", () => {
+    var engine = (change.storageArea = window.localStorage
+      ? "localStorage"
+      : "sessionStorage");
+    handleChange(
+      `External change in <b>${engine}</b>: key <b> ${change.key}</b> changed from <b> ${change.oldValue}</b> to <b> ${change.newValue}</b>`
+    );
+    if (engine === selectedEngine) {
+      reloadInputValue();
+    }
+  });
 }
